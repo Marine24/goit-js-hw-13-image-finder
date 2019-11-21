@@ -11,8 +11,8 @@ PNotify.defaults.delay = 2500;
 const { API_KEY, API_URL } = apiService;
 let page = 1;
 let perPage = 12;
-const BTN = document.querySelector('.btn-more');
-const { searchForm, serchInput, ul, sectionGallery } = refs;
+
+const { searchForm, serchInput, ul, btn } = refs;
 
 const getListByName = async name => {
   const result = await fetch(
@@ -34,7 +34,7 @@ const renderList = async () => {
     PNotify.error('There is nothing for your request');
   } else {
     ul.innerHTML = createList(hits);
-    BTN.style.display = 'block';
+    btn.style.display = 'block';
   }
 };
 
@@ -53,6 +53,6 @@ searchForm.addEventListener('submit', async e => {
   renderList();
 });
 
-BTN.addEventListener('click', () => {
+btn.addEventListener('click', () => {
   loadeMore();
 });
