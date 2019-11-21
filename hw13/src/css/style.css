@@ -27,6 +27,7 @@
   background: transparent;
 }
 .btn-more {
+  display: none;
   position: absolute;
   margin: 20px;
   left: 800px;

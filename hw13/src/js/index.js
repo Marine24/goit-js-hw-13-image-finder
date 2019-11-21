@@ -1,12 +1,17 @@
 import '../css/style.css';
 import apiService from './apiService.js';
 import galleryItem from '../template/galleryItem.hbs';
+import PNotify from 'pnotify/dist/es/PNotify.js';
+import PNotifyStyleMaterial from 'pnotify/dist/es/PNotifyStyleMaterial.js';
 import refs from './refs.js';
 
+PNotify.defaults.styling = 'material';
+PNotify.defaults.icons = 'material';
+PNotify.defaults.delay = 2500;
 const { API_KEY, API_URL } = apiService;
 let page = 1;
 let perPage = 12;
-
+const BTN = document.querySelector('.btn-more');
 const { searchForm, serchInput, ul, sectionGallery } = refs;
 
 const getListByName = async name => {
@@ -22,17 +27,15 @@ const createList = photoList => {
   }, '');
 };
 
-const addBtnMore = () => {
-  const btn = ` <button class="btn-more">
-                    Load more
-                </button>`;
-  sectionGallery.insertAdjacentHTML('beforeend', btn);
-};
-
 const renderList = async () => {
   page = 1;
   const { hits } = await getListByName(serchInput.value);
-  ul.innerHTML = createList(hits);
+  if (hits <= 0) {
+    PNotify.error('There is nothing for your request');
+  } else {
+    ul.innerHTML = createList(hits);
+    BTN.style.display = 'block';
+  }
 };
 
 const loadeMore = async () => {
@@ -48,9 +51,8 @@ const loadeMore = async () => {
 searchForm.addEventListener('submit', async e => {
   e.preventDefault();
   renderList();
-  addBtnMore();
 });
 
-sectionGallery.addEventListener('click', async e => {
+BTN.addEventListener('click', () => {
   loadeMore();
 });
